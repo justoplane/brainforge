@@ -7,6 +7,7 @@ import { Signup } from './pages/SignUp/_Signup.tsx'
 import { SignIn } from './pages/SignIn/_SignIn.tsx'
 import { Home } from './pages/Home/_Home.tsx'
 import { Logout } from './pages/Logout/_Logout.tsx'
+import { Project } from './pages/Project/_Project.tsx'
 import { ApiContext } from './lib/api_context.ts'
 import { useAuthToken } from './lib/hooks/use_auth_token.ts'
 import { Api } from './lib/api.ts'
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashboard />
+      },
+      {
+        path: "/projects/:id",
+        element: <Project />
       }
     ]
   }
