@@ -6,6 +6,7 @@ import { ProjectHistory } from "../../components/project/ProjectHistory";
 import { CodeIDE } from "../../components/project/CodeIDE";
 import { ChatContainer } from "../../components/project/ChatContainer";
 import { OutputContainer } from "../../components/project/OutputContainer";
+import { Task } from "../../components/project/Task";
 
 type User = {
   id: string;
@@ -33,6 +34,7 @@ export const Project = () => {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(defaultProject);
   const [output, setOutput] = useState<string>("");
+  const [assignmentText, setAssignmentText] = useState<string>("");
   const api = useApi();
   
   async function fetchUser() {
@@ -47,6 +49,10 @@ export const Project = () => {
     fetchUser();
   }, [])
 
+  const handleAssignmentSubmit = (text: string) => {
+    setAssignmentText(text);
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -54,12 +60,15 @@ export const Project = () => {
       <ProjectHistory />
       <div className="main-content">
         <CodeIDE setOutput={setOutput} />
+        <OutputContainer output={output} />
+        <ChatContainer />
+        <Task assignmentText={assignmentText} />
         <div className="right-container">
-          <ChatContainer />
-          <OutputContainer output={output} />
+          
+          
         </div>
       </div>
-      <OptionsDrawer />
+      <OptionsDrawer onAssignmentSubmit={handleAssignmentSubmit} />
     </div>
   );
 }
