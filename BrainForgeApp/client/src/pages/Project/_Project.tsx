@@ -51,15 +51,15 @@ export const Project = () => {
 
   return (
     <div className="project-page">
-      <OptionsDrawer />
+      <ProjectHistory />
       <div className="main-content">
-        <ProjectHistory />
         <CodeIDE setOutput={setOutput} />
         <div className="right-container">
           <ChatContainer />
           <OutputContainer output={output} />
         </div>
       </div>
+      <OptionsDrawer />
     </div>
   );
 }

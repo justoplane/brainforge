@@ -5,6 +5,16 @@ interface CodeIDEProps {
   setOutput: (output: string) => void;
 }
 
+const languages = [
+  { label: "JavaScript", value: "javascript" },
+  { label: "Python", value: "python" },
+  { label: "Java", value: "java" },
+  { label: "C++", value: "cpp" },
+  { label: "Ruby", value: "ruby" },
+  { label: "Go", value: "go" },
+  // Add more languages as needed
+];
+
 export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput }) => {
   const [code, setCode] = useState("// Write your code here");
   const [language, setLanguage] = useState("javascript");
@@ -42,6 +52,20 @@ export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput }) => {
 
   return (
     <div className="code-ide">
+      <div className="language-selector">
+        <label htmlFor="language">Select Language: </label>
+        <select
+          id="language"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
+          {languages.map((lang) => (
+            <option key={lang.value} value={lang.value}>
+              {lang.label}
+            </option>
+          ))}
+        </select>
+      </div>
       <Editor
         options={{
           minimap: { enabled: false },
