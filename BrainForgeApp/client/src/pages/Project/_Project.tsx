@@ -7,7 +7,6 @@ import { CodeIDE } from "../../components/project/CodeIDE";
 import { ChatContainer } from "../../components/project/ChatContainer";
 import { OutputContainer } from "../../components/project/OutputContainer";
 
-
 type User = {
   id: string;
   email: string;
@@ -22,7 +21,6 @@ type Project = {
   // Add other project fields as needed
 }
 
-
 const defaultProject: Project = {
   id: 1000000000,
   title: 'Default Project',
@@ -34,7 +32,7 @@ export const Project = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(defaultProject);
-  // const [project, setProject] = useState<Project | null>(null);
+  const [output, setOutput] = useState<string>("");
   const api = useApi();
   
   async function fetchUser() {
@@ -44,14 +42,6 @@ export const Project = () => {
     }
     setLoading(false);
   }
-
-  // async function fetchProject() {
-  //   const res = await api.get(`/api/projects/${project?.id}`);
-  //   if (!res.error) {
-  //     setProject(res.project);
-  //   }
-  //   setLoading(false);
-  // }
 
   useEffect(() => {
     fetchUser();
@@ -64,13 +54,12 @@ export const Project = () => {
       <OptionsDrawer />
       <div className="main-content">
         <ProjectHistory />
-        <CodeIDE />
+        <CodeIDE setOutput={setOutput} />
         <div className="right-container">
           <ChatContainer />
-          <OutputContainer />
+          <OutputContainer output={output} />
         </div>
       </div>
     </div>
-    
   );
 }

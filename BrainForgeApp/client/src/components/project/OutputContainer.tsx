@@ -1,11 +1,13 @@
+interface OutputContainerProps {
+  output: string;
+}
 
+export const OutputContainer: React.FC<OutputContainerProps> = ({ output }) => {
+  return (
+    <div className="output-container">
+      <h2>Output</h2>
+      <pre>{output}</pre>
+    </div>
+  );
+};
 
-export const OutputContainer = () => {
-    return (
-      <div className="task-container">
-        <h2>Generated Task/Assignment</h2>
-        {/* Add task content here */}
-      </div>
-    );
-  }
-  
