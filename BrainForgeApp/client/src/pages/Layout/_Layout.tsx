@@ -1,14 +1,32 @@
-import { Outlet, Link } from "react-router";
+import { Outlet, Link, useNavigate } from "react-router";
 import { Error } from "../../components/common/Error";
 import { useAuthToken } from "../../lib/hooks/use_auth_token";
 import { Button } from "../../components/ui/button";
+import { useDispatch } from "react-redux";
+import { clearAuthToken } from "@/store/application_slice";
 
 export const Layout = () => {
   const authToken = useAuthToken();
   const isAuthenticated = !!authToken;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logout = () => {
     // Implement your logout logic here
+    // localStorage.removeItem("authToken"); // Adjust key if stored differently
+    // // Optionally clear other user-related data
+    // sessionStorage.clear();
+
+    // navigate("/signin");
+    dispatch(clearAuthToken());
+
+  //   console.log("Before logout:", localStorage.getItem("authToken")); // Check token before removal
+  // localStorage.removeItem("authToken");
+  // sessionStorage.clear();
+  // console.log("After logout:", localStorage.getItem("authToken")); // Check token after removal
+  navigate("/signin", { replace: true });
+
+
   };
 
   return (

@@ -19,9 +19,14 @@ export const applicationSlice = createSlice({
       }
       state.authToken = payload;
     },
+    clearAuthToken: (state) => {
+      state.authToken = null;
+      state.settings = DEFAULT_SETTINGS;
+      window.localStorage.removeItem("authToken");
+    },
   }
 });
 
-export const { setAuthToken } = applicationSlice.actions;
+export const { setAuthToken, clearAuthToken } = applicationSlice.actions;
 
 export const applicationReducer = applicationSlice.reducer;

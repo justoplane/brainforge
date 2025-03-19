@@ -90,8 +90,16 @@ export const getProject: EndpointBuilder = (db) => async (req, res) => {
 };
 
 export const getAllProjects: EndpointBuilder = (db) => async (req, res) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   try {
-    const projects = await db.project.findMany();
+    const projects = await db.project.findMany({
+      where: { userId },
+    });
     res.status(200).json({ projects });
   } catch (error) {
     res.status(400).json({ error: "Failed to fetch projects" });
