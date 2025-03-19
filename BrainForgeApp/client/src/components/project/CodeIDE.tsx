@@ -56,14 +56,14 @@ export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput, starterCode }) => {
   return (
     <div className="p-4 border rounded-lg shadow-sm bg-card space-y-4">
       <div className="flex items-center justify-between">
-        <label htmlFor="language" className="text-sm font-medium text-muted-foreground">
+        <label htmlFor="language-select" className="text-sm font-medium text-muted-foreground">
           Select Language:
         </label>
         <Select
           value={language}
           onValueChange={(value) => setLanguage(value)}
         >
-          <SelectTrigger className="w-48">
+          <SelectTrigger id="language-select" className="w-48">
             <SelectValue placeholder="Select Language" />
           </SelectTrigger>
           <SelectContent>
