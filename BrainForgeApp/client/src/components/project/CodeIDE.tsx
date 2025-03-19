@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 
 interface CodeIDEProps {
   setOutput: (output: string) => void;
+  starterCode?: string; // Add starterCode as an optional prop
 }
 
 const languages = [
@@ -17,8 +18,8 @@ const languages = [
   // Add more languages as needed
 ];
 
-export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput }) => {
-  const [code, setCode] = useState("// Write your code here");
+export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput, starterCode }) => {
+  const [code, setCode] = useState(starterCode || "// Write your code here"); // Initialize with starterCode
   const [language, setLanguage] = useState("javascript");
 
   const handleRunCode = async () => {

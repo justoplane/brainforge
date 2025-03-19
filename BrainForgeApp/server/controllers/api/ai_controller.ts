@@ -3,11 +3,17 @@ import { $Enums, PrismaClient } from "@prisma/client";
 import { authMiddleware } from "../../middleware/auth_middleware";
 
 export const generateAssignmentOrChallenge: EndpointBuilder = (db) => async (req, res) => {
-  const { projectId, type } = req.body;
+  console.log("generate called");
+  
+  let { projectId, type } = req.body;
+  projectId = parseInt(projectId);
+
+  
 
   if (!projectId || !type) {
     return res.status(400).json({ error: "Project ID and type are required" });
   }
+  // handle file/submit type sent from the client(pdf, video, etc)
 
   try {
     // Mock AI response

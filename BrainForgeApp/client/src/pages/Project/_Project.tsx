@@ -33,6 +33,11 @@ const defaultProject: Project = {
   description: "This is the default project description",
 };
 
+// interface OptionsDrawerProps {
+//   onAssignmentSubmit: (data: { type: string; instructions: string; starterCode: string; expectedOutput: string }) => void;
+//   isOpen: boolean;
+// }
+
 export const Project = () => {
   requireLogin();
   const { id } = useParams<{ id: string }>();
@@ -66,8 +71,9 @@ export const Project = () => {
     fetchProject();
   }, []);
 
-  const handleAssignmentSubmit = (text: string) => {
-    setAssignmentText(text);
+  const handleAssignmentSubmit = (data: { type: string; instructions: string; starterCode: string; expectedOutput: string }) => {
+    setAssignmentText(data.instructions); // Update Task instructions
+    setOutput(data.expectedOutput); // Update OutputContainer with expected output
     setIsOptionsOpen(false); // Close drawer after submission
   };
 
@@ -96,7 +102,7 @@ export const Project = () => {
         </DrawerTrigger>
         <DrawerContent className="w-[300px] p-0">
           <div className="h-full">
-            <OptionsDrawer onAssignmentSubmit={handleAssignmentSubmit} isOpen={isOptionsOpen} />
+            <OptionsDrawer onAssignmentSubmit={handleAssignmentSubmit} projectId={id || "default-id"} />
           </div>
         </DrawerContent>
       </Drawer>

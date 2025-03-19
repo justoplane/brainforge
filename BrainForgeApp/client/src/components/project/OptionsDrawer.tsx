@@ -1,27 +1,52 @@
 import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { Button } from "../../components/ui/button";
+import { useApi } from "@/lib/hooks/use_api";
+
 
 interface OptionsDrawerProps {
-  onAssignmentSubmit: (text: string) => void;
-  isOpen: boolean;
+  onAssignmentSubmit: (data: { type: string; instructions: string; starterCode: string; expectedOutput: string }) => void;
+  projectId: string; // Add projectId as a prop
 }
 
-export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit, isOpen }) => {
+export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit, projectId }) => {
   const [taskType, setTaskType] = useState("challenge");
   const [inputType, setInputType] = useState("text");
   const [inputValue, setInputValue] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const api = useApi();
+  
+  
 
-  const handleSubmit = () => {
-    if (inputType === "pdf" && file) {
-      onAssignmentSubmit(`File uploaded: ${file.name}`);
-    } else if (inputType === "youtube") {
-      onAssignmentSubmit(`YouTube link: ${inputValue}`);
-    } else {
-      onAssignmentSubmit(inputValue);
-    }
-  };
+  const handleSubmit = async () => {
+    
+    try {
+      console.log("Submitting assignment...");
+      console.log("Task Type:", taskType);
+      console.log("Input Type:", inputType);
+      console.log("Input Value:", inputValue);
+      console.log("File:", file);
+      const response = await api.post("/api/ai/generate", {
+          projectId, 
+          type: taskType.toUpperCase(),
+          inputType,
+          inputValue: inputType === 'pdf' && file ? file.name : inputValue,
+        
+        
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        onAssignmentSubmit(data); // Pass the server response to the parent
+      } else {
+        const error = await response.json();
+        console.error('Error:', error);
+      }
+    } catch (error) {
+      console.error('Error submitting assignment:', error);
+
+    
+     }};
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
