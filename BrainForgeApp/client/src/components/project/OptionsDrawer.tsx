@@ -31,16 +31,12 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
           type: taskType.toUpperCase(),
           inputType,
           inputValue: inputType === 'pdf' && file ? file.name : inputValue,
-        
-        
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        onAssignmentSubmit(data); // Pass the server response to the parent
+      
+      if (response) {
+        onAssignmentSubmit(response.history); // Pass the server response to the parent
       } else {
-        const error = await response.json();
-        console.error('Error:', error);
+        console.error('Error: response was not ok.');
       }
     } catch (error) {
       console.error('Error submitting assignment:', error);

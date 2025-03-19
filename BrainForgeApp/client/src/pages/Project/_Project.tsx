@@ -13,6 +13,7 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { useParams } from "react-router";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 type User = {
   id: string;
@@ -63,6 +64,7 @@ export const Project = () => {
     const res = await api.get(`/api/projects/${id}`);
     if (!res.error) {
       setProject(res.project);
+      // TODO: Load other project data
     }
   }
 
@@ -100,8 +102,10 @@ export const Project = () => {
             Create New
           </button>
         </DrawerTrigger>
-        <DrawerContent className="w-[300px] p-0">
+        <DrawerContent className="w-[300px] p-0"
+          aria-describedby="">
           <div className="h-full">
+            <DialogTitle></DialogTitle>
             <OptionsDrawer onAssignmentSubmit={handleAssignmentSubmit} projectId={id || "default-id"} />
           </div>
         </DrawerContent>
@@ -121,8 +125,10 @@ export const Project = () => {
             History
           </button>
         </DrawerTrigger>
-        <DrawerContent className="w-[300px] p-0">
+        <DrawerContent className="w-[300px] p-0"
+          aria-describedby="">
           <div className="h-full">
+            <DialogTitle></DialogTitle>
             <ProjectHistory />
           </div>
         </DrawerContent>
