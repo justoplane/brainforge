@@ -40,23 +40,31 @@ export const ChatContainer: React.FC = () => {
   };
 
   return (
-    <div className="chat-container">
-      <h2>Chat with AI</h2>
-      <div className="chat-messages">
+    <div className="p-4 border rounded-lg shadow-sm bg-card flex flex-col h-full">
+      <h2 className="text-xl font-semibold mb-2">Chat with AI</h2>
+      <div className="space-y-2 max-h-64 overflow-y-auto flex-1">
         {messages.map((message, index) => (
-          <div key={index} className={`chat-message ${message.sender}`}>
-            <span>{message.text}</span>
+          <div
+            key={index}
+            className={`p-2 rounded-lg ${
+              message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+            }`}
+          >
+            {message.text}
           </div>
         ))}
       </div>
-      <div className="chat-input">
+      <div className="flex mt-4 space-x-2">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your message..."
+          className="flex-1 p-2 border rounded-lg"
         />
-        <button onClick={handleSendMessage}>Send</button>
+        <button onClick={handleSendMessage} className="px-4 py-2 bg-primary text-white rounded-lg">
+          Send
+        </button>
       </div>
     </div>
   );

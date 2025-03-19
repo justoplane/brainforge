@@ -4,9 +4,9 @@ interface OutputContainerProps {
 
 export const OutputContainer: React.FC<OutputContainerProps> = ({ output }) => {
   return (
-    <div className="output-container">
-      <h2>Output</h2>
-      <pre>{output}</pre>
+    <div className="p-4 border rounded-lg shadow-sm bg-card">
+      <h2 className="text-xl font-semibold mb-2">Output</h2>
+      <pre className="bg-muted p-2 rounded-lg">{output}</pre>
     </div>
   );
 };

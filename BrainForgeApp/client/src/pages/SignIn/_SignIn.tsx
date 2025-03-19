@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router";
 import { FormEvent, useState } from "react";
 import { useApi } from "../../lib/hooks/use_api";
 import { setAuthToken } from "../../store/application_slice";
+import { Card, CardHeader, CardContent, CardFooter } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 
 export const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +20,6 @@ export const SignIn = () => {
       email,
       password
     });
-    console.log(res);
     if (!res.error && res.authToken) {
       dispatch(setAuthToken(res.authToken));
       navigate("/dashboard");
@@ -27,34 +29,34 @@ export const SignIn = () => {
   }
 
   return (
-    <main className="auth-container">
-      <form onSubmit={signIn} className="auth-form">
-        <h3 className="auth-title">Sign In</h3>
-        <div className="auth-input-group">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="auth-input"
-          />
-        </div>
-        <div className="auth-input-group">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className="auth-input"
-          />
-        </div>
-        <div className="auth-button-group">
-          <button className="auth-button">Sign In</button>
-        </div>
-      </form>
-      <div className="auth-footer">
-        New user? <Link to="/signup" className="auth-link">Create an account.</Link>
-      </div>
+    <main className="flex justify-center items-center min-h-screen bg-background">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader>
+          <h3 className="text-2xl font-bold text-center">Sign In</h3>
+        </CardHeader>
+        <form onSubmit={signIn}>
+          <CardContent className="space-y-4">
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </CardContent>
+          <CardFooter className="flex flex-col items-center space-y-4">
+            <Button type="submit" className="w-full">Sign In</Button>
+            <p className="text-sm text-center">
+              New user? <Link to="/signup" className="text-primary font-medium">Create an account.</Link>
+            </p>
+          </CardFooter>
+        </form>
+      </Card>
     </main>
   );
 };

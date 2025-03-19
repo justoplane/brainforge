@@ -1,178 +1,112 @@
 import React, { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { Button } from "../../components/ui/button";
 
 interface OptionsDrawerProps {
   onAssignmentSubmit: (text: string) => void;
+  isOpen: boolean;
 }
 
-export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [submissionType, setSubmissionType] = useState("");
+export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit, isOpen }) => {
+  const [taskType, setTaskType] = useState("challenge");
+  const [inputType, setInputType] = useState("text");
   const [inputValue, setInputValue] = useState("");
-
-  const toggleDrawer = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.target.value);
-  };
-
-  const handleSubmissionTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSubmissionType(event.target.value);
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setInputValue(event.target.value);
-  };
+  const [file, setFile] = useState<File | null>(null);
 
   const handleSubmit = () => {
-    // Handle the submit action here
-    console.log("Submitted:", { selectedOption, submissionType, inputValue });
-    onAssignmentSubmit(inputValue);
+    if (inputType === "pdf" && file) {
+      onAssignmentSubmit(`File uploaded: ${file.name}`);
+    } else if (inputType === "youtube") {
+      onAssignmentSubmit(`YouTube link: ${inputValue}`);
+    } else {
+      onAssignmentSubmit(inputValue);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
   };
 
   return (
-    <div className={`options-drawer ${isOpen ? "open" : ""}`}>
-      <button className="toggle-button" onClick={toggleDrawer}>
-        {isOpen ? "Close Options" : "Open Options"}
-      </button>
-      {isOpen && (
-        <div className="drawer-content">
-          <h2>Options</h2>
-          <label className="drawer-label">
-            Select Type:
-            <select value={selectedOption} onChange={handleOptionChange}>
-              <option value="">Select...</option>
-              <option value="short-challenge">Short Challenge</option>
-              <option value="assignment">Assignment</option>
-            </select>
-          </label>
-          {selectedOption && (
-            <div className="submission-options">
-              <label className="drawer-label">
-                Submission Type:
-                <select value={submissionType} onChange={handleSubmissionTypeChange}>
-                  <option value="">Select...</option>
-                  <option value="youtube-link">YouTube Link</option>
-                  <option value="paste-text">Paste Text</option>
-                  <option value="upload-pdf">Upload PDF</option>
-                </select>
-              </label>
-              {submissionType === "youtube-link" && (
-                <div className="input-group">
-                  <label>
-                    YouTube Link:
-                    <input type="text" placeholder="Paste YouTube link here" value={inputValue} onChange={handleInputChange} />
-                  </label>
-                </div>
-              )}
-              {submissionType === "paste-text" && (
-                <div className="input-group">
-                  <label>
-                    Text:
-                    <textarea placeholder="Paste text here" value={inputValue} onChange={handleInputChange}></textarea>
-                  </label>
-                </div>
-              )}
-              {submissionType === "upload-pdf" && (
-                <div className="input-group">
-                  <label>
-                    Upload PDF:
-                    <input type="file" accept="application/pdf" />
-                  </label>
-                </div>
-              )}
-              <button onClick={handleSubmit} className="submit-button">Submit</button>
-            </div>
-          )}
+    <div className="p-4 h-full overflow-y-auto">
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Create New Challenge</h2>
+        
+        {/* Task Type Dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-muted-foreground mb-1">Task Type</label>
+          <Select value={taskType} onValueChange={(value) => setTaskType(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Task Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="challenge">Challenge</SelectItem>
+              <SelectItem value="assignment">Assignment</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      )}
+
+        {/* Input Type Dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-muted-foreground mb-1">Input Type</label>
+          <Select value={inputType} onValueChange={(value) => setInputType(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Input Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pdf">PDF</SelectItem>
+              <SelectItem value="youtube">YouTube Link</SelectItem>
+              <SelectItem value="text">Text</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Conditional Input Fields */}
+        {inputType === "pdf" && (
+          <div>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">Upload PDF</label>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleFileChange}
+              className="w-full p-2 border rounded-lg"
+            />
+          </div>
+        )}
+        {inputType === "youtube" && (
+          <div>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">YouTube Link</label>
+            <input
+              type="url"
+              placeholder="Enter YouTube link"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="w-full p-2 border rounded-lg"
+            />
+          </div>
+        )}
+        {inputType === "text" && (
+          <div>
+            <label className="block text-sm font-medium text-muted-foreground mb-1">Text</label>
+            <textarea
+              placeholder="Enter text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="w-full p-2 border rounded-lg"
+            ></textarea>
+          </div>
+        )}
+
+        {/* Submit and Generate AI Response Buttons */}
+        <div className="flex space-x-4 mt-6">
+          <Button onClick={handleSubmit} className="w-full">
+            Submit
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
-
-// import React, { useState } from "react";
-
-// export const OptionsDrawer: React.FC = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [selectedOption, setSelectedOption] = useState("");
-//   const [submissionType, setSubmissionType] = useState("");
-
-//   const toggleDrawer = () => {
-//     setIsOpen(!isOpen);
-//   };
-
-//   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     setSelectedOption(event.target.value);
-//   };
-
-//   const handleSubmissionTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     setSubmissionType(event.target.value);
-//   };
-
-//   const handleSubmit = () => {
-//     // Handle the submit action here
-//     console.log("Submitted:", { selectedOption, submissionType });
-//   };
-
-//   return (
-//     <div className={`options-drawer ${isOpen ? "open" : ""}`}>
-//       <button className="toggle-button" onClick={toggleDrawer}>
-//         {isOpen ? "Close Options" : "Open Options"}
-//       </button>
-//       {isOpen && (
-//         <div className="drawer-content">
-//           <h2>Options</h2>
-//           <label className="drawer-label">
-//             Select Type:
-//             <select value={selectedOption} onChange={handleOptionChange}>
-//               <option value="">Select...</option>
-//               <option value="short-challenge">Short Challenge</option>
-//               <option value="assignment">Assignment</option>
-//             </select>
-//           </label>
-//           {selectedOption && (
-//             <div className="submission-options">
-//               <label className="drawer-label">
-//                 Submission Type:
-//                 <select value={submissionType} onChange={handleSubmissionTypeChange}>
-//                   <option value="">Select...</option>
-//                   <option value="youtube-link">YouTube Link</option>
-//                   <option value="paste-text">Paste Text</option>
-//                   <option value="upload-pdf">Upload PDF</option>
-//                 </select>
-//               </label>
-//               {submissionType === "youtube-link" && (
-//                 <div className="input-group">
-//                   <label>
-//                     YouTube Link:
-//                     <input type="text" placeholder="Paste YouTube link here" />
-//                   </label>
-//                 </div>
-//               )}
-//               {submissionType === "paste-text" && (
-//                 <div className="input-group">
-//                   <label>
-//                     Text:
-//                     <textarea placeholder="Paste text here"></textarea>
-//                   </label>
-//                 </div>
-//               )}
-//               {submissionType === "upload-pdf" && (
-//                 <div className="input-group">
-//                   <label>
-//                     Upload PDF:
-//                     <input type="file" accept="application/pdf" />
-//                   </label>
-//                 </div>
-//               )}
-//               <button onClick={handleSubmit} className="submit-button">Submit</button>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
 

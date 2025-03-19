@@ -1,6 +1,7 @@
 import { Outlet, Link } from "react-router";
 import { Error } from "../../components/common/Error";
 import { useAuthToken } from "../../lib/hooks/use_auth_token";
+import { Button } from "../../components/ui/button";
 
 export const Layout = () => {
   const authToken = useAuthToken();
@@ -12,35 +13,38 @@ export const Layout = () => {
 
   return (
     <>
-      <div className="banner">
-        <Link to="/" className="banner-link">
-        <h1 className="banner-title">Brain Forge</h1>
-        </Link>
-        <div className="banner-buttons">
-          {isAuthenticated ? (
-            <>
-              <Link to="/dashboard" className="banner-link">
-                <button className="banner-button">Dashboard</button>
-              </Link>
-
-              <Link to="/logout" className="banner-link">
-                <button className="banner-button" onClick={logout}>Logout</button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link to="/signin" className="banner-link">
-                <button className="banner-button">Sign in</button>
-              </Link>
-              <Link to="/signup" className="banner-link">
-                <button className="banner-button">Sign up</button>
-              </Link>
-            </>
-          )}
+      <header className="bg-primary text-primary-foreground shadow-md">
+        <div className="container mx-auto flex justify-between items-center py-4 px-6">
+          <Link to="/" className="text-2xl font-bold">
+            Brain Forge
+          </Link>
+          <nav className="flex space-x-4">
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard">
+                  <Button variant="secondary">Dashboard</Button>
+                </Link>
+                <Button variant="destructive" onClick={logout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/signin">
+                  <Button variant="secondary">Sign In</Button>
+                </Link>
+                <Link to="/signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
-      </div>
+      </header>
       <Error />
-      <Outlet />
+      <main className="container mx-auto py-6 px-4">
+        <Outlet />
+      </main>
     </>
   );
 };

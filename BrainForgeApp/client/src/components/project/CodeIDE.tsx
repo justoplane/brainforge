@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
+import { Button } from "../../components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface CodeIDEProps {
   setOutput: (output: string) => void;
@@ -21,50 +23,56 @@ export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput }) => {
 
   const handleRunCode = async () => {
     try {
-      const response = await fetch('/api/piston/run', {
-        method: 'POST',
+      const response = await fetch("/api/piston/run", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ language, code }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to execute code');
+        throw new Error("Failed to execute code");
       }
 
       const data = await response.json();
-      console.log('Data:', data);
+      console.log("Data:", data);
 
       let output = data.run.stdout || data.run.stderr || "Error running code";
       if (data.run.stderr) {
-        const stderrLines = data.run.stderr.split('\n');
+        const stderrLines = data.run.stderr.split("\n");
         stderrLines.shift(); // Remove the first line
-        output = stderrLines.join('\n');
+        output = stderrLines.join("\n");
       }
 
       setOutput(output);
     } catch (error) {
-      console.error('Error:', error);
-      setOutput('Error running code');
+      console.error("Error:", error);
+      setOutput("Error running code");
     }
   };
 
   return (
-    <div className="code-ide">
-      <div className="language-selector">
-        <label htmlFor="language">Select Language: </label>
-        <select
-          id="language"
+    <div className="p-4 border rounded-lg shadow-sm bg-card space-y-4">
+      <div className="flex items-center justify-between">
+        <label htmlFor="language" className="text-sm font-medium text-muted-foreground">
+          Select Language:
+        </label>
+        <Select
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onValueChange={(value) => setLanguage(value)}
         >
-          {languages.map((lang) => (
-            <option key={lang.value} value={lang.value}>
-              {lang.label}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-48">
+            <SelectValue placeholder="Select Language" />
+          </SelectTrigger>
+          <SelectContent>
+            {languages.map((lang) => (
+              <SelectItem key={lang.value} value={lang.value}>
+                {lang.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <Editor
         options={{
@@ -76,8 +84,11 @@ export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput }) => {
         defaultValue={code}
         language={language}
         onChange={(value) => setCode(value || "")}
+        className="border rounded-lg"
       />
-      <button onClick={handleRunCode} className="run-button">Run Code</button>
+      <Button onClick={handleRunCode} className="w-full">
+        Run Code
+      </Button>
     </div>
   );
 };
