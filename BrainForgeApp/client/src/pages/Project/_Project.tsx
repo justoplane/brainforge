@@ -12,6 +12,7 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from "../../components/ui/drawer";
+import { useParams } from "react-router";
 
 type User = {
   id: string;
@@ -34,6 +35,8 @@ const defaultProject: Project = {
 
 export const Project = () => {
   requireLogin();
+  const { id } = useParams<{ id: string }>();
+  
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(defaultProject);
@@ -51,8 +54,16 @@ export const Project = () => {
     setLoading(false);
   }
 
+  async function fetchProject() {
+    const res = await api.get(`/api/projects/${id}`);
+    if (!res.error) {
+      setProject(res.project);
+    }
+  }
+
   useEffect(() => {
     fetchUser();
+    fetchProject();
   }, []);
 
   const handleAssignmentSubmit = (text: string) => {

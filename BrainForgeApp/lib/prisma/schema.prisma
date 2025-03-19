@@ -17,6 +17,7 @@ model User {
   email         String        @unique
   passwordHash  String
   lmsUserId     Int?          @unique
+  projects      Project[]
   contextRoles  ContextRole[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -44,4 +45,63 @@ model ContextRole {
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+
+model Project {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  userId      Int
+  user        User         @relation(fields: [userId], references: [id])
+  materials   Material[]   // One-to-many relationship with materials
+  history     History[]    // One-to-many relationship with history
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+
+model Material {
+  id          Int          @id @default(autoincrement())
+  type        MaterialType // Enum for material type (PDF, YouTube, Text)
+  content     String       // URL for YouTube, text for text, or file path for PDF
+  projectId   Int
+  project     Project      @relation(fields: [projectId], references: [id])
+  createdAt   DateTime     @default(now())
+}
+
+
+model History {
+  id              Int          @id @default(autoincrement())
+  type            HistoryType  // Enum for Assignment or Challenge
+  instructions    String       // Instructions for the assignment or challenge
+  starterCode     String?      // Optional starter code for challenges
+  expectedOutput  String?      // Optional expected output for challenges
+  projectId       Int
+  project         Project      @relation(fields: [projectId], references: [id])
+  chatHistory     ChatHistory[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+
+model ChatHistory {
+  id          Int      @id @default(autoincrement())
+  historyId   Int
+  history     History  @relation(fields: [historyId], references: [id])
+  userMessage String
+  aiMessage   String
+  createdAt   DateTime @default(now())
+}
+
+enum MaterialType {
+  PDF
+  YOUTUBE
+  TEXT
+}
+
+enum HistoryType {
+  ASSIGNMENT
+  CHALLENGE
 }
