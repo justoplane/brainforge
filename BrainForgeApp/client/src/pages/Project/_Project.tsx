@@ -16,6 +16,9 @@ import { DialogTitle } from "../../components/ui/dialog"; // Assuming you have a
 import { useParams } from "react-router";
 import { Button } from "../../components/ui/button";
 
+
+
+
 type User = {
   id: string;
   email: string;
@@ -77,6 +80,7 @@ export const Project = () => {
     const res = await api.get(`/api/projects/${id}`);
     if (!res.error) {
       setProject(res.project);
+      // TODO: Load other project data
     }
   }
 
@@ -127,9 +131,13 @@ export const Project = () => {
             Create New
           </Button>
         </DrawerTrigger>
+
         <DrawerContent className="w-[300px] p-0" aria-describedby="">
           <DialogTitle className="text-xl font-semibold">Create New Assignment</DialogTitle> {/* Add DialogTitle */}
+
+
           <div className="h-full">
+            <DialogTitle></DialogTitle>
             <OptionsDrawer onAssignmentSubmit={handleAssignmentSubmit} projectId={id || "default-id"} />
           </div>
         </DrawerContent>
@@ -149,9 +157,11 @@ export const Project = () => {
             History
           </button>
         </DrawerTrigger>
+
         <DrawerContent className="w-[300px] p-0" aria-describedby="">
           <DialogTitle className="text-xl font-semibold">Project History</DialogTitle>
           <div className="h-full">
+            <DialogTitle></DialogTitle>
             <ProjectHistory />
           </div>
         </DrawerContent>

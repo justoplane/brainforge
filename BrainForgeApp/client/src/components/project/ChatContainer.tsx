@@ -1,3 +1,4 @@
+import { useApi } from "@/lib/hooks/use_api";
 import React, { useState } from "react";
 
 interface Message {
@@ -8,6 +9,7 @@ interface Message {
 export const ChatContainer: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const api = useApi();
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
@@ -17,13 +19,14 @@ export const ChatContainer: React.FC = () => {
     setInput("");
 
     try {
-      const response = await fetch("/api/ai/chat", {
+      const response = await api.post("/api/ai/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ message: input }),
       });
+      console.log(response)
 
       if (!response.ok) {
         throw new Error("Failed to communicate with AI");

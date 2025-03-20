@@ -46,6 +46,7 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
   // const handleSubmit = async () => {
   //   // onAssignmentSubmit({ type: taskType as "Assignment" | "Challenge", instructions: inputValue });
     
+
   //   // try {
   //   //   console.log("Submitting assignment...");
   //   //   console.log("Task Type:", taskType);
@@ -60,6 +61,28 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
         
         
   //   //   });
+const handleSubmit = async () => {
+    try {
+      console.log("Submitting assignment...");
+      console.log("Task Type:", taskType);
+      console.log("Input Type:", inputType);
+      console.log("Input Value:", inputValue);
+      console.log("File:", file);
+      const response = await api.post("/api/ai/generate", {
+          projectId, 
+          type: taskType.toUpperCase(),
+          inputType,
+          inputValue: inputType === 'pdf' && file ? file.name : inputValue,
+      });
+      
+      if (response) {
+        onAssignmentSubmit(response.history); // Pass the server response to the parent
+      } else {
+        console.error('Error: response was not ok.');
+      }
+    } catch (error) {
+      console.error('Error submitting assignment:', error);}
+
 
   //   //   if (response.ok) {
   //   //     const data = await response.json();
@@ -75,7 +98,7 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
   //   //  }
   //   };
 
-  const handleSubmit = () => {
+  const handleSubmitMock = () => {
     
       const history = {
         

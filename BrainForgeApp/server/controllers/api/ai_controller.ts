@@ -50,6 +50,7 @@ export const generateAssignmentOrChallenge: EndpointBuilder = (db) => async (req
 
 export const chatWithAI: EndpointBuilder = (db) => async (req, res) => {
   const { historyId, userMessage } = req.body;
+  console.log("chat called");
 
   if (!historyId || !userMessage) {
     return res.status(400).json({ error: "History ID and user message are required" });
