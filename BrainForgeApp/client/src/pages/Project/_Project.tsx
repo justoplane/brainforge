@@ -174,9 +174,14 @@ export const Project = () => {
         <p className="text-muted-foreground text-center mb-6">Welcome click "Create New" to add learning resources and create a challenges or assignment based off your learning. You may create multiple challenges/assignments in a project.</p>
         <div className="grid grid-cols-4 gap-6">
           <Task instructions={instructions} expectedOutput={history?.expectedOutput} />
-          <CodeIDE setOutput={setOutput} starterCode={starterCode} />
-          <OutputContainer output={output} />
-          <ChatContainer />
+          
+          {/* CodeIDE and OutputContainer stacked vertically */}
+          <div className="col-span-2 flex flex-col gap-6">
+            <CodeIDE setOutput={setOutput} starterCode={starterCode} />
+            <OutputContainer output={output} />
+          </div>
+          
+          <ChatContainer historyId={history?.id} />
         </div>
       </div>
     </div>

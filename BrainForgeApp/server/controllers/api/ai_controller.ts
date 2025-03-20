@@ -1,43 +1,34 @@
 import { EndpointBuilder, controller } from "../controller";
 import { $Enums, PrismaClient } from "@prisma/client";
 import { authMiddleware } from "../../middleware/auth_middleware";
+import { fetchAIAssnResponse, fetchAIChatResponse } from "./ai_prompts";
 
 export const generateAssignmentOrChallenge: EndpointBuilder = (db) => async (req, res) => {
   console.log("generate called");
   
-  let { projectId, type } = req.body;
+  let { projectId, type, inputValue } = req.body;
   projectId = parseInt(projectId);
-
-  
 
   if (!projectId || !type) {
     return res.status(400).json({ error: "Project ID and type are required" });
   }
-  // handle file/submit type sent from the client(pdf, video, etc)
 
   try {
-    // Mock AI response
-    const mockResponse =
-      type === "CHALLENGE"
-        ? {
-            type: "CHALLENGE",
-            instructions: "Write a function to reverse a string.",
-            starterCode: "function reverseString(str) { }",
-            expectedOutput: "Input: 'hello' -> Output: 'olleh'",
-          }
-        : {
-            type: "ASSIGNMENT",
-            instructions: "Create a simple to-do list application using React.",
-          };
+    // Call the OpenAI API via the fetchAIResponse function
+    const aiResponse = await fetchAIAssnResponse(type, inputValue);
+
+    if (!aiResponse) {
+      return res.status(500).json({ error: "Failed to generate response from AI" });
+    }
 
     // Store the response in the database
     const history = await db.history.create({
       data: {
         projectId,
-        type: mockResponse.type as $Enums.HistoryType,
-        instructions: mockResponse.instructions,
-        starterCode: mockResponse.starterCode || null,
-        expectedOutput: mockResponse.expectedOutput || null,
+        type: aiResponse.type as $Enums.HistoryType,
+        instructions: aiResponse.instructions || "",
+        starterCode: aiResponse.starterCode || null,
+        expectedOutput: aiResponse.expectedOutput || null,
       },
     });
 
@@ -50,7 +41,6 @@ export const generateAssignmentOrChallenge: EndpointBuilder = (db) => async (req
 
 export const chatWithAI: EndpointBuilder = (db) => async (req, res) => {
   const { historyId, userMessage } = req.body;
-  console.log("chat called");
 
   if (!historyId || !userMessage) {
     return res.status(400).json({ error: "History ID and user message are required" });
@@ -66,17 +56,23 @@ export const chatWithAI: EndpointBuilder = (db) => async (req, res) => {
       return res.status(404).json({ error: "History entry not found" });
     }
 
-    // Mock AI response
-    const mockAIResponse = {
-      aiMessage: `You asked: "${userMessage}". Based on your assignment/challenge, here's a suggestion: ...`,
-    };
+    // Fetch the chat history for the given historyId
+    const chatHistory = await db.chatHistory.findMany({
+      where: { historyId },
+      orderBy: { createdAt: "asc" }, // Optional: Order by creation time
+    });
 
-    // Store the chat in the database
+    // Call fetchAIChatResponse with the messages array
+    const ai_response = await fetchAIChatResponse(chatHistory, history.instructions, history.starterCode, userMessage);
+    if (!ai_response) {
+      return res.status(500).json({ error: "Failed to get AI response" });
+    }
+    // Store the new chat in the database
     const chat = await db.chatHistory.create({
       data: {
         historyId,
         userMessage,
-        aiMessage: mockAIResponse.aiMessage,
+        aiMessage: ai_response,
       },
     });
 

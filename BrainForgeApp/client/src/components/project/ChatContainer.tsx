@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { useApi } from "@/lib/hooks/use_api";
 import { useState } from "react";
 
@@ -5,8 +6,11 @@ interface Message {
   sender: "user" | "ai";
   text: string;
 }
+type ChatContainerProps = {
+  historyId?: number;
+};
 
-export function ChatContainer(){
+export const ChatContainer = ({ historyId }: ChatContainerProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const api = useApi();
@@ -20,20 +24,16 @@ export function ChatContainer(){
 
     try {
       const response = await api.post("/api/ai/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: input }),
+        historyId: historyId,
+        userMessage: input,
       });
-      console.log(response)
+      console.log(response);
 
-      if (!response.ok) {
+      if (!response) {
         throw new Error("Failed to communicate with AI");
       }
 
-      const data = await response.json();
-      const aiMessage: Message = { sender: "ai", text: data.reply };
+      const aiMessage: Message = { sender: "ai", text: response.chat.aiMessage };
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       console.error("Error:", error);
@@ -45,15 +45,30 @@ export function ChatContainer(){
   return (
     <div className="p-4 border rounded-lg shadow-sm bg-card flex flex-col h-full">
       <h2 className="text-xl font-semibold mb-2">Chat with AI</h2>
-      <div className="space-y-2 max-h-64 overflow-y-auto flex-1">
+      <div className="flex-1 overflow-y-auto space-y-2">
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`p-2 rounded-lg ${
+            className={`p-2 rounded-lg w-full ${
               message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
-            }`}
+            } break-words whitespace-normal`}
           >
-            {message.text}
+            <ReactMarkdown
+              components={{
+                pre: ({ children }) => (
+                  <pre className="whitespace-pre-wrap break-words bg-gray-100 p-2 rounded">
+                    {children}
+                  </pre>
+                ),
+                code: ({ children }) => (
+                  <code className="whitespace-pre-wrap break-words bg-gray-200 p-1 rounded">
+                    {children}
+                  </code>
+                ),
+              }}
+            >
+              {message.text}
+            </ReactMarkdown>
           </div>
         ))}
       </div>
