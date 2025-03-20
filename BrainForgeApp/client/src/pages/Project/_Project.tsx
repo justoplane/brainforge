@@ -95,7 +95,6 @@ export const Project = () => {
     // Update the UI with the new history data
     setInstructions(newHistory.instructions);
     setStarterCode(newHistory.starterCode || "");
-    // setOutput(newHistory.expectedOutput || "");
   
     // Optionally, update the history state if needed
     setHistory(newHistory);
@@ -128,7 +127,7 @@ export const Project = () => {
             Create New
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="w-[300px] p-0">
+        <DrawerContent className="w-[300px] p-0" aria-describedby="">
           <DialogTitle className="text-xl font-semibold">Create New Assignment</DialogTitle> {/* Add DialogTitle */}
           <div className="h-full">
             <OptionsDrawer onAssignmentSubmit={handleAssignmentSubmit} projectId={id || "default-id"} />
@@ -150,65 +149,14 @@ export const Project = () => {
             History
           </button>
         </DrawerTrigger>
-        <DrawerContent className="w-[300px] p-0">
+        <DrawerContent className="w-[300px] p-0" aria-describedby="">
           <DialogTitle className="text-xl font-semibold">Project History</DialogTitle>
           <div className="h-full">
             <ProjectHistory />
           </div>
         </DrawerContent>
       </Drawer>
-      {/* <div className="relative">
-      <Button
-        onClick={() => setIsHistoryOpen(true)}
-        className="fixed left-4 top-1/2 transform -translate-y-1/2"
-      >
-        History
-      </Button>
-
-      <Drawer open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-        <DrawerContent className="w-80 bg-white">
-          
-          <div className="p-4 border-b">
-            <Button variant="ghost" onClick={() => setIsHistoryOpen(false)}>
-              Close
-            </Button>
-          </div>
-
-          
-          <div className="p-4">
-            <ProjectHistory />
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </div> */}
-
-
-{/* <div className="relative">
-     
-      <Button
-        onClick={() => setIsHistoryOpen(true)}
-        className="fixed right-4 top-1/2 transform -translate-y-1/2"
-      >
-        History
-      </Button>
-
       
-      <Drawer open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-        <DrawerContent className="w-80 bg-white ml-auto">
-          
-          <div className="p-4 border-b flex justify-end">
-            <Button variant="ghost" onClick={() => setIsHistoryOpen(false)}>
-              Close
-            </Button>
-          </div>
-
-          
-          <div className="p-4">
-            <ProjectHistory />
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </div> */}
 
       {/* Main Content - full width regardless of drawer state */}
       <div className="flex-1 container mx-auto py-6 px-4 w-full">

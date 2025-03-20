@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { Button } from "../../components/ui/button";
 import { useApi } from "@/lib/hooks/use_api";
-import { on } from "events";
+
 
 
 // interface OptionsDrawerProps {
@@ -78,9 +78,7 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
   const handleSubmit = () => {
     
       const history = {
-        // event: "User Clicked Submit",
-        // time: new Date().toLocaleTimeString(),
-        // details: { user: "JohnDoe", action: "Submitted Form" }, // Can be any structure
+        
         type: taskType as "Assignment" | "Challenge",
         instructions: "here is some default instructions",
         starterCode: taskType === "challenge" ? "// Starter code here" : undefined,
