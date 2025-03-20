@@ -4,7 +4,7 @@ export const ProjectHistory: React.FC = () => {
   return (
     <div className="p-4 h-full overflow-y-auto">
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Project History</h2>
+        {/* <h2 className="text-xl font-semibold">Project History</h2> */}
         
         {/* History content */}
         <div className="space-y-4 mt-4">
