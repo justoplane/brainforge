@@ -1,12 +1,12 @@
 import { useApi } from "@/lib/hooks/use_api";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface Message {
   sender: "user" | "ai";
   text: string;
 }
 
-export const ChatContainer: React.FC = () => {
+export function ChatContainer(){
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const api = useApi();

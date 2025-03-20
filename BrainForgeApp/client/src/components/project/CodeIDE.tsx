@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Button } from "../../components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -18,7 +18,7 @@ const languages = [
   // Add more languages as needed
 ];
 
-export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput, starterCode }) => {
+export function CodeIDE({ setOutput, starterCode }:CodeIDEProps){
   const [code, setCode] = useState(starterCode); // Initialize with starterCode
   const [language, setLanguage] = useState("javascript");
 

@@ -33,7 +33,7 @@ type History = {
 
 
 
-export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit, projectId }) => {
+export function OptionsDrawer({ onAssignmentSubmit, projectId }: OptionsDrawerProps) {
   const [taskType, setTaskType] = useState("challenge");
   const [inputType, setInputType] = useState("text");
   const [inputValue, setInputValue] = useState("");
@@ -44,23 +44,23 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
   
 
   // const handleSubmit = async () => {
-  //   // onAssignmentSubmit({ type: taskType as "Assignment" | "Challenge", instructions: inputValue });
+    // onAssignmentSubmit({ type: taskType as "Assignment" | "Challenge", instructions: inputValue });
     
 
-  //   // try {
-  //   //   console.log("Submitting assignment...");
-  //   //   console.log("Task Type:", taskType);
-  //   //   console.log("Input Type:", inputType);
-  //   //   console.log("Input Value:", inputValue);
-  //   //   console.log("File:", file);
-  //   //   const response = await api.post("/api/ai/generate", {
-  //   //       projectId, 
-  //   //       type: taskType.toUpperCase(),
-  //   //       inputType,
-  //   //       inputValue: inputType === 'pdf' && file ? file.name : inputValue,
+    // try {
+    //   console.log("Submitting assignment...");
+    //   console.log("Task Type:", taskType);
+    //   console.log("Input Type:", inputType);
+    //   console.log("Input Value:", inputValue);
+    //   console.log("File:", file);
+    //   const response = await api.post("/api/ai/generate", {
+    //       projectId, 
+    //       type: taskType.toUpperCase(),
+    //       inputType,
+    //       inputValue: inputType === 'pdf' && file ? file.name : inputValue,
         
         
-  //   //   });
+    //   });
 const handleSubmit = async () => {
     try {
       console.log("Submitting assignment...");
@@ -81,7 +81,7 @@ const handleSubmit = async () => {
         console.error('Error: response was not ok.');
       }
     } catch (error) {
-      console.error('Error submitting assignment:', error);}
+      console.error('Error submitting assignment:', error);}}
 
 
   //   //   if (response.ok) {

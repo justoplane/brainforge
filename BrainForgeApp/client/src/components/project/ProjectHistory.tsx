@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ProjectHistory: React.FC = () => {
+export function ProjectHistory(){
   return (
     <div className="p-4 h-full overflow-y-auto">
       <div className="space-y-4">
