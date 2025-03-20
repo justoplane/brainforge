@@ -60,7 +60,7 @@ export const Layout = () => {
         </div>
       </header>
       <Error />
-      <main className="container mx-auto py-6 px-4">
+      <main className="w-full py-6">
         <Outlet />
       </main>
     </>

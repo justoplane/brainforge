@@ -2,12 +2,36 @@ import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { Button } from "../../components/ui/button";
 import { useApi } from "@/lib/hooks/use_api";
+import { on } from "events";
 
+
+// interface OptionsDrawerProps {
+//   onAssignmentSubmit: (data: { type: string; instructions: string; starterCode: string; expectedOutput: string }) => void;
+//   projectId: string; // Add projectId as a prop
+// }
+
+// interface OptionsDrawerProps {
+//   onAssignmentSubmit: (data: { type: "Assignment" | "Challenge"; instructions: string; starterCode?: string; expectedOutput?: string }) => void;
+//   projectId: string; // Add projectId as a prop
+// }
 
 interface OptionsDrawerProps {
-  onAssignmentSubmit: (data: { type: string; instructions: string; starterCode: string; expectedOutput: string }) => void;
+  onAssignmentSubmit: (history: any) => void;
   projectId: string; // Add projectId as a prop
 }
+
+type History = {
+  id: number;
+  type: "Assignment" | "Challenge";
+  instructions: string;
+  starterCode?: string;
+  expectedOutput?: string;
+  projectId: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+
 
 export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit, projectId }) => {
   const [taskType, setTaskType] = useState("challenge");
@@ -15,38 +39,58 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
   const [inputValue, setInputValue] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const api = useApi();
+  const [history, setHistory] = useState<History | null>(null);
   
   
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
+  //   // onAssignmentSubmit({ type: taskType as "Assignment" | "Challenge", instructions: inputValue });
     
-    try {
-      console.log("Submitting assignment...");
-      console.log("Task Type:", taskType);
-      console.log("Input Type:", inputType);
-      console.log("Input Value:", inputValue);
-      console.log("File:", file);
-      const response = await api.post("/api/ai/generate", {
-          projectId, 
-          type: taskType.toUpperCase(),
-          inputType,
-          inputValue: inputType === 'pdf' && file ? file.name : inputValue,
+  //   // try {
+  //   //   console.log("Submitting assignment...");
+  //   //   console.log("Task Type:", taskType);
+  //   //   console.log("Input Type:", inputType);
+  //   //   console.log("Input Value:", inputValue);
+  //   //   console.log("File:", file);
+  //   //   const response = await api.post("/api/ai/generate", {
+  //   //       projectId, 
+  //   //       type: taskType.toUpperCase(),
+  //   //       inputType,
+  //   //       inputValue: inputType === 'pdf' && file ? file.name : inputValue,
         
         
-      });
+  //   //   });
 
-      if (response.ok) {
-        const data = await response.json();
-        onAssignmentSubmit(data); // Pass the server response to the parent
-      } else {
-        const error = await response.json();
-        console.error('Error:', error);
-      }
-    } catch (error) {
-      console.error('Error submitting assignment:', error);
+  //   //   if (response.ok) {
+  //   //     const data = await response.json();
+  //   //     onAssignmentSubmit(data); // Pass the server response to the parent
+  //   //   } else {
+  //   //     const error = await response.json();
+  //   //     console.error('Error:', error);
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error('Error submitting assignment:', error);
 
     
-     }};
+  //   //  }
+  //   };
+
+  const handleSubmit = () => {
+    
+      const history = {
+        // event: "User Clicked Submit",
+        // time: new Date().toLocaleTimeString(),
+        // details: { user: "JohnDoe", action: "Submitted Form" }, // Can be any structure
+        type: taskType as "Assignment" | "Challenge",
+        instructions: "here is some default instructions",
+        starterCode: taskType === "challenge" ? "// Starter code here" : undefined,
+        expectedOutput: taskType === "challenge" ? "Expected output will go here here" : undefined,
+        projectId: parseInt(projectId),
+      };
+      onAssignmentSubmit(history);
+
+
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -57,7 +101,7 @@ export const OptionsDrawer: React.FC<OptionsDrawerProps> = ({ onAssignmentSubmit
   return (
     <div className="p-4 h-full overflow-y-auto">
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Create New Challenge</h2>
+        {/* <h2 className="text-xl font-semibold">Create New Challenge</h2> */}
         
         {/* Task Type Dropdown */}
         <div>

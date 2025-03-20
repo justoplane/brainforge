@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Button } from "../../components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -19,8 +19,14 @@ const languages = [
 ];
 
 export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput, starterCode }) => {
-  const [code, setCode] = useState(starterCode || "// Write your code here"); // Initialize with starterCode
+  const [code, setCode] = useState(starterCode); // Initialize with starterCode
   const [language, setLanguage] = useState("javascript");
+
+
+  useEffect(() => {
+    setCode(starterCode);
+  }
+  , [starterCode]);
 
   const handleRunCode = async () => {
     try {
@@ -82,9 +88,9 @@ export const CodeIDE: React.FC<CodeIDEProps> = ({ setOutput, starterCode }) => {
         }}
         height="400px"
         defaultLanguage="javascript"
-        defaultValue={code}
+        value={code}
         language={language}
-        onChange={(value) => setCode(value || "")}
+        onChange={(value) => setCode(value)}
         className="border rounded-lg"
       />
       <Button onClick={handleRunCode} className="w-full">

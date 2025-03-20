@@ -6,7 +6,6 @@ import { Card, CardHeader, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -47,7 +46,7 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const api = useApi();
   const [projects, setProjects] = useState<Project[]>(mockProjects);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
   const navigate = useNavigate();
 
@@ -75,7 +74,7 @@ export const Dashboard = () => {
     const res = await api.post("/api/projects", { title: newProjectName });
     if (!res.error) {
       setProjects((prev) => [...prev, res.project]);
-      setIsModalOpen(false);
+      // setIsModalOpen(false);
       navigate(`/projects/${res.project.id}`);
     }
     else{
@@ -101,7 +100,7 @@ export const Dashboard = () => {
         <DialogHeader>
           <DialogTitle>Create Project</DialogTitle>
           <DialogDescription>
-            Enter name and description of your project.
+            Enter the name your new project.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
