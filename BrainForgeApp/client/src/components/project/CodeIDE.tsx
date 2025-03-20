@@ -5,7 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 
 interface CodeIDEProps {
   setOutput: (output: string) => void;
-  starterCode?: string; // Add starterCode as an optional prop
+  starterCode?: string;
+  
 }
 
 const languages = [
@@ -15,10 +16,9 @@ const languages = [
   { label: "C++", value: "cpp" },
   { label: "Ruby", value: "ruby" },
   { label: "Go", value: "go" },
-  // Add more languages as needed
 ];
 
-export function CodeIDE({ setOutput, starterCode }:CodeIDEProps){
+export function CodeIDE({ setOutput, starterCode}:CodeIDEProps){
   const [code, setCode] = useState(starterCode); // Initialize with starterCode
   const [language, setLanguage] = useState("javascript");
 
@@ -48,7 +48,7 @@ export function CodeIDE({ setOutput, starterCode }:CodeIDEProps){
       let output = data.run.stdout || data.run.stderr || "Error running code";
       if (data.run.stderr) {
         const stderrLines = data.run.stderr.split("\n");
-        stderrLines.shift(); // Remove the first line
+        stderrLines.shift(); // Remove the first line of error
         output = stderrLines.join("\n");
       }
 

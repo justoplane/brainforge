@@ -1,7 +1,0 @@
-{
-  "name": "Worker Container",
-  "dockerComposeFile": "../../docker-compose.yml",
-  "service": "worker",
-  "shutdownAction": "none",
-  "workspaceFolder": "/app"
-}

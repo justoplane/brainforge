@@ -38,7 +38,7 @@ type History = {
   type: "Assignment" | "Challenge";
   instructions: string;
   starterCode?: string;
-  expectedOutput?: string;
+  expectedOutput: string;
   projectId: number;
   createdAt: string;
   updatedAt: string;
@@ -66,7 +66,9 @@ export const Project = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [starterCode, setStarterCode] = useState<string>("");
   const [history, setHistory] = useState<History | null>(null);
+  const [correctOutputMessage, setCorrectOutputMessage] = useState<string>("");
   const api = useApi();
+
 
   async function fetchUser() {
     const res = await api.get("/api/users/me");
@@ -89,12 +91,23 @@ export const Project = () => {
     fetchProject();
   }, []);
 
-  // const handleAssignmentSubmit = (data: { type: string; instructions: string; starterCode: string; expectedOutput: string }) => {
-  //   setAssignmentText(data.instructions); // Update Task instructions
-  //   setOutput(data.expectedOutput); // Update OutputContainer with expected output
-  //   setIsOptionsOpen(false); // Close drawer after submission
-  // };
+  useEffect(() => {
 
+    if(history){
+      if(output === history?.expectedOutput){
+        setCorrectOutputMessage("Correct Output!");
+      }
+      else{
+        setCorrectOutputMessage("Incorrect Output!");
+      }
+    }
+    
+
+
+
+  }, [output]);
+
+  
   const handleAssignmentSubmit = (newHistory: History) => {
     // Update the UI with the new history data
     setInstructions(newHistory.instructions);
@@ -106,6 +119,8 @@ export const Project = () => {
     // Close the options drawer
     setIsOptionsOpen(false);
   };
+
+  
 
 
   if (loading || !project)
@@ -168,7 +183,7 @@ export const Project = () => {
       </Drawer>
       
 
-      {/* Main Content - full width regardless of drawer state */}
+      {/* Main Content */}
       <div className="flex-1 container mx-auto py-6 px-4 w-full">
         <h1 className="text-3xl font-bold text-center">{project?.title}</h1>
         <p className="text-muted-foreground text-center mb-6">Welcome click "Create New" to add learning resources and create a challenges or assignment based off your learning. You may create multiple challenges/assignments in a project.</p>
@@ -177,8 +192,13 @@ export const Project = () => {
           
           {/* CodeIDE and OutputContainer stacked vertically */}
           <div className="col-span-2 flex flex-col gap-6">
-            <CodeIDE setOutput={setOutput} starterCode={starterCode} />
+            <CodeIDE setOutput={setOutput} starterCode={starterCode}/>
             <OutputContainer output={output} />
+            {output && (
+              <div className="bg-green-100 text-green-800 p-4 rounded">
+              {correctOutputMessage}
+              </div>
+            )}
           </div>
           
           <ChatContainer historyId={history?.id} />

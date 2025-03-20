@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { PrismaClient } from "@prisma/client"
 import { UsersController } from "../controllers/api/users_controller"
-import { PistonController } from "../controllers/piston_controller";
+import { PistonController } from "../controllers/api/piston_controller";
 import { ProjectsController } from "../controllers/api/projects_controller";
 import { AIController } from "../controllers/api/ai_controller";
 
