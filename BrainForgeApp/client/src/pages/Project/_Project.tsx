@@ -171,7 +171,7 @@ export const Project = () => {
       {/* Main Content - full width regardless of drawer state */}
       <div className="flex-1 container mx-auto py-6 px-4 w-full">
         <h1 className="text-3xl font-bold text-center">{project?.title}</h1>
-        <p className="text-muted-foreground text-center mb-6">{project?.description}</p>
+        <p className="text-muted-foreground text-center mb-6">Welcome click "Create New" to add learning resources and create a challenges or assignment based off your learning. You may create multiple challenges/assignments in a project.</p>
         <div className="grid grid-cols-4 gap-6">
           <Task instructions={instructions} expectedOutput={history?.expectedOutput} />
           <CodeIDE setOutput={setOutput} starterCode={starterCode} />
