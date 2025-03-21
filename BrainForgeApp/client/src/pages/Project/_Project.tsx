@@ -84,15 +84,15 @@ export const Project = () => {
   }, []);
 
   useEffect(() => {
-    if (history) {
-      setInstructions(history[history.length-1].instructions);
+    if (history != null && history?.length >0) {
+      setInstructions(history[history.length-1].instructions || "");
       setStarterCode(history[history.length-1].starterCode || "");
     }
   }, [history]);
 
   useEffect(() => {
 
-    if(history){
+    if(history != null && history?.length > 0){
       if(output === history[history.length-1].expectedOutput){
         setCorrectOutputMessage("Correct Output!");
       }
