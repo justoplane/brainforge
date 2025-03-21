@@ -16,6 +16,7 @@ export const ChatContainer = ({ historyId }: ChatContainerProps) => {
   const api = useApi();
 
   useEffect(() => {
+    setMessages([]); // Clear messages when historyId changes
     fetchChatHistory();
     }, [historyId]);
 
