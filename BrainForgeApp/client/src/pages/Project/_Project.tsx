@@ -43,6 +43,7 @@ export const Project = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [starterCode, setStarterCode] = useState<string>("");
   const [history, setHistory] = useState<History[] | null>(null);
+  const [currentHistory, setCurrentHistory] = useState<History | null>(null);
   const [correctOutputMessage, setCorrectOutputMessage] = useState<string>("");
   const api = useApi();
 
@@ -68,15 +69,23 @@ export const Project = () => {
 
   useEffect(() => {
     if (history != null && history?.length >0) {
-      setInstructions(history[history.length-1].instructions || "");
-      setStarterCode(history[history.length-1].starterCode || "");
+      setCurrentHistory(history[history.length-1]);
     }
   }, [history]);
 
   useEffect(() => {
+    if (currentHistory) {
+      setInstructions(currentHistory.instructions);
+      setStarterCode(currentHistory.starterCode || "");
+    }
+  }, [currentHistory]);
 
-    if(history != null && history?.length > 0){
-      if(output === history[history.length-1].expectedOutput){
+
+  useEffect(() => {
+
+    if(currentHistory){
+      const trimmedOutput = output.replace(/\s+$/, "");
+      if(trimmedOutput === currentHistory.expectedOutput){
         setCorrectOutputMessage("Correct Output!");
       }
       else{
@@ -84,9 +93,6 @@ export const Project = () => {
       }
     }
     
-
-
-
   }, [output]);
 
   
@@ -100,7 +106,6 @@ export const Project = () => {
     setIsOptionsOpen(false);
   };
 
-  
 
 
   if (loading || !project)
