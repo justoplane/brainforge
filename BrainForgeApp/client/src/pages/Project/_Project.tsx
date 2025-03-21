@@ -50,7 +50,7 @@ export const Project = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [starterCode, setStarterCode] = useState<string>("");
-  const [history, setHistory] = useState<History | null>(null);
+  const [history, setHistory] = useState<History[] | null>(null);
   const [correctOutputMessage, setCorrectOutputMessage] = useState<string>("");
   const api = useApi();
 
@@ -70,22 +70,30 @@ export const Project = () => {
     }
   }
 
+  async function fetchHistory() {
+    const res = await api.get(`/api/projects/${id}/history`);
+    if (!res.error) {
+      setHistory(res.history);
+    }
+  }
+
   useEffect(() => {
     fetchUser();
     fetchProject();
+    fetchHistory();
   }, []);
 
   useEffect(() => {
     if (history) {
-      setInstructions(history.instructions);
-      setStarterCode(history.starterCode || "");
+      setInstructions(history[history.length-1].instructions);
+      setStarterCode(history[history.length-1].starterCode || "");
     }
   }, [history]);
 
   useEffect(() => {
 
     if(history){
-      if(output === history?.expectedOutput){
+      if(output === history[history.length-1].expectedOutput){
         setCorrectOutputMessage("Correct Output!");
       }
       else{
@@ -105,7 +113,7 @@ export const Project = () => {
     setStarterCode(newHistory.starterCode || "");
   
     // update history
-    setHistory(newHistory);
+    setHistory(history ? [...history, newHistory] : [newHistory]);
     setIsOptionsOpen(false);
   };
 
@@ -166,7 +174,12 @@ export const Project = () => {
           <DialogTitle className="text-xl font-semibold">Project History</DialogTitle>
           <div className="h-full">
             <DialogTitle></DialogTitle>
-            <ProjectHistory projectId={project.id} setHistory={setHistory} />
+            <ProjectHistory 
+              projectId={project.id} 
+              setHistory={(newHistory: History) => 
+                setHistory(prev => prev ? [...prev, newHistory] : [newHistory])
+              } 
+            />
           </div>
         </DrawerContent>
       </Drawer>
@@ -177,7 +190,7 @@ export const Project = () => {
         <h1 className="text-3xl font-bold text-center">{project?.title}</h1>
         <p className="text-muted-foreground text-center mb-6">Welcome click "Create New" to add learning resources and create a challenges or assignment based off your learning. You may create multiple challenges/assignments in a project.</p>
         <div className="grid grid-cols-4 gap-6">
-          <Task instructions={instructions} expectedOutput={history?.expectedOutput} />
+          <Task instructions={instructions} expectedOutput={history?.[history.length - 1]?.expectedOutput} />
           
           {/* CodeIDE and OutputContainer stacked vertically */}
           <div className="col-span-2 flex flex-col gap-6">
@@ -190,7 +203,7 @@ export const Project = () => {
             )}
           </div>
           
-          <ChatContainer historyId={history?.id} />
+          <ChatContainer historyId={history?.[history.length - 1]?.id} />
         </div>
       </div>
     </div>

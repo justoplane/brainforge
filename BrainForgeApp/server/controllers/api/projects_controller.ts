@@ -65,6 +65,10 @@ export const getProjectHistory: EndpointBuilder = (db) => async (req, res) => {
     const history = await db.history.findMany({
       where: { projectId: parseInt(projectId) },
     });
+
+    // Disable caching
+    res.setHeader("Cache-Control", "no-store");
+
     res.status(200).json({ history });
   } catch (error) {
     res.status(400).json({ error: "Failed to fetch project history" });
@@ -82,6 +86,9 @@ export const getProject: EndpointBuilder = (db) => async (req, res) => {
     if (!project) {
       return res.status(404).json({ error: "Project not found" });
     }
+
+    // Disable caching
+    res.setHeader("Cache-Control", "no-store");
 
     res.status(200).json({ project });
   } catch (error) {
@@ -114,10 +121,6 @@ export const getChatHistory: EndpointBuilder = (db) => async (req, res) => {
       where: { historyId: parseInt(historyId) },
       orderBy: { createdAt: "asc" }, // Optional: Order by creation time
     });
-
-    if (!chatHistory.length) {
-      return res.status(404).json({ error: "No chat history found for the given history ID" });
-    }
 
     res.status(200).json({ chatHistory });
     console.log(chatHistory);
