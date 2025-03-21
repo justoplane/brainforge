@@ -61,7 +61,6 @@ export const Dashboard = () => {
     const res = await api.get("/api/projects");
     if (!res.error) {
       setProjects(res.projects);
-      console.log(res.projects);
     }
   }
 

@@ -33,7 +33,6 @@ export const ChatContainer = ({ historyId }: ChatContainerProps) => {
 
           setMessages(formattedMessages);
         }
-        console.log("Chat History:", response.chatHistory);
       } catch (error) {
         console.error("Error fetching chat history:", error);
       }
@@ -51,7 +50,6 @@ export const ChatContainer = ({ historyId }: ChatContainerProps) => {
         historyId: historyId,
         userMessage: input,
       });
-      console.log(response);
 
       if (!response) {
         throw new Error("Failed to communicate with AI");

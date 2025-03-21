@@ -181,7 +181,7 @@ export const Project = () => {
           <Task instructions={instructions} expectedOutput={history?.[history.length - 1]?.expectedOutput} />
           
           {/* CodeIDE and OutputContainer stacked vertically */}
-          <div className="col-span-2 flex flex-col gap-6">
+          <div className="col-span-2 flex flex-col gap-6" style={{ maxHeight: "800px" }}>
             <CodeIDE setOutput={setOutput} starterCode={starterCode}/>
             <OutputContainer output={output} />
             {output && (
@@ -191,7 +191,10 @@ export const Project = () => {
             )}
           </div>
           
-          <ChatContainer historyId={history?.[history.length - 1]?.id} />
+          {/* ChatContainer with fixed height */}
+          <div className="flex flex-col" style={{ maxHeight: "650px", overflow: "auto" }}>
+            <ChatContainer historyId={history?.[history.length - 1]?.id} />
+          </div>
         </div>
       </div>
     </div>

@@ -20,11 +20,6 @@ export function OptionsDrawer({ onAssignmentSubmit, projectId }: OptionsDrawerPr
   
   const handleSubmit = async () => {
       try {
-        console.log("Submitting assignment...");
-        console.log("Task Type:", taskType);
-        console.log("Input Type:", inputType);
-        console.log("Input Value:", inputValue);
-        console.log("File:", file);
         const response = await api.post("/api/ai/generate", {
             projectId, 
             type: taskType.toUpperCase(),

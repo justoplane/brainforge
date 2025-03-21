@@ -43,9 +43,8 @@ export function CodeIDE({ setOutput, starterCode}:CodeIDEProps){
       }
 
       const data = await response.json();
-      console.log("Data:", data);
-
       let output = data.run.stdout || data.run.stderr || "Error running code";
+
       if (data.run.stderr) {
         const stderrLines = data.run.stderr.split("\n");
         stderrLines.shift(); // Remove the first line of error
@@ -54,7 +53,6 @@ export function CodeIDE({ setOutput, starterCode}:CodeIDEProps){
 
       setOutput(output);
     } catch (error) {
-      console.error("Error:", error);
       setOutput("Error running code");
     }
   };

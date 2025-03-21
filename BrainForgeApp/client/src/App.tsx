@@ -19,8 +19,6 @@ function App() {
     
     <Outlet/>
     </div>
-      
-    
   )
 }
 

@@ -28,7 +28,6 @@ export function ProjectHistory({ projectId, setHistory }: ProjectHistoryProps) {
   async function fetchHistories() {
     const res = await api.get(`/api/projects/${projectId}/history`);
     if (!res.error && res.history) { // Ensure res.histories exists
-      console.log("Histories:", res.history);
       setHistories(res.history);
     } else {
       console.error("Failed to fetch histories or no histories available.");
