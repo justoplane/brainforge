@@ -6,7 +6,7 @@ import { useApi } from "@/lib/hooks/use_api";
 
 interface OptionsDrawerProps {
   onAssignmentSubmit: (history: any) => void;
-  projectId: string; // Add projectId as a prop
+  projectId: string; 
 }
 
 

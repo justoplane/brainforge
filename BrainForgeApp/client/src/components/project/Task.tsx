@@ -17,7 +17,7 @@ export function Task({ instructions, expectedOutput }: TaskProps) {
       {expectedOutput && (
         <div className="p-3 border border-dashed rounded-md bg-muted/10 overflow-y-auto mt-4">
           <b className="text-primary">Expected Output: </b>
-          <p className="text-muted-foreground">{expectedOutput}</p>
+          <pre className="bg-muted p-2 rounded-lg whitespace-pre-wrap break-words">{expectedOutput}</pre>
         </div>
       )}
     </div>

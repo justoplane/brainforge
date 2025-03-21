@@ -13,13 +13,6 @@ import { useParams } from "react-router";
 import { Button } from "../../components/ui/button";
 
 
-type User = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-};
-
 type Project = {
   id: number;
   title: string;
@@ -42,7 +35,6 @@ type History = {
 export const Project = () => {
   requireLogin();
   const { id } = useParams<{ id: string }>();
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(null);
   const [output, setOutput] = useState<string>("");
@@ -54,19 +46,11 @@ export const Project = () => {
   const [correctOutputMessage, setCorrectOutputMessage] = useState<string>("");
   const api = useApi();
 
-
-  async function fetchUser() {
-    const res = await api.get("/api/users/me");
-    if (!res.error) {
-      setUser(res.user);
-    }
-    setLoading(false);
-  }
-
   async function fetchProject() {
     const res = await api.get(`/api/projects/${id}`);
     if (!res.error) {
       setProject(res.project);
+      setLoading(false);
     }
   }
 
@@ -78,7 +62,6 @@ export const Project = () => {
   }
 
   useEffect(() => {
-    fetchUser();
     fetchProject();
     fetchHistory();
   }, []);

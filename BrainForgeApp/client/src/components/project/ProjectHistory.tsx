@@ -12,6 +12,8 @@ type History = {
   createdAt: string;
   updatedAt: string;
 };
+
+
 interface ProjectHistoryProps {
   projectId: number;
   setHistory: (history: History) => void;
@@ -20,7 +22,7 @@ interface ProjectHistoryProps {
 
 
 export function ProjectHistory({ projectId, setHistory }: ProjectHistoryProps) {
-  const [histories, setHistories] = useState<History[]>([]); // Ensure it's initialized as an empty array
+  const [histories, setHistories] = useState<History[]>([]);
   const api = useApi();
 
   async function fetchHistories() {

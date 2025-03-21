@@ -1,11 +1,13 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useApi } from "../../lib/hooks/use_api";
 import { setAuthToken } from "../../store/application_slice";
 import { Card, CardHeader, CardContent, CardFooter } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
+import { RootState } from "../../store/store";
+
 
 export const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,13 @@ export const SignIn = () => {
   const api = useApi();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const authToken = useSelector((store: RootState) => store.application.authToken);
+
+  useEffect(() => {
+    if (authToken) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [authToken, navigate]);
 
   async function signIn(e: FormEvent) {
     e.preventDefault();
@@ -50,7 +59,7 @@ export const SignIn = () => {
             />
           </CardContent>
           <CardFooter className="flex flex-col items-center space-y-4">
-            <Button type="submit" className="w-full">Sign In</Button>
+            <Button type="submit" className="w-full mt-4">Sign In</Button>
             <p className="text-sm text-center">
               New user? <Link to="/signup" className="text-primary font-medium">Create an account.</Link>
             </p>

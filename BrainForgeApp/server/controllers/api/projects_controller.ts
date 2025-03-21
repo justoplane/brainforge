@@ -76,6 +76,7 @@ export const getProjectHistory: EndpointBuilder = (db) => async (req, res) => {
 
 export const getProject: EndpointBuilder = (db) => async (req, res) => {
   const { projectId } = req.params;
+  const userId = req.user?.id;
 
   try {
     const project = await db.project.findUnique({
@@ -84,6 +85,10 @@ export const getProject: EndpointBuilder = (db) => async (req, res) => {
 
     if (!project) {
       return res.status(404).json({ error: "Project not found" });
+    }
+
+    if (project.userId !== userId) {
+      return res.status(403).json({ error: "Forbidden: You do not have access to this project" });
     }
 
     // Disable caching

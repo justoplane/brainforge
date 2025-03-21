@@ -9,8 +9,7 @@ export const Home = () => {
         <CardContent className="text-center space-y-6">
           <h2 className="text-3xl font-bold">Welcome to Brain Forge</h2>
           <p className="text-lg text-muted-foreground">
-            This app allows users to input learning resources, focused mostly on programming, 
-            and use AI to develop challenges and assignments to test the user on what they have learned.
+          Brain Forge is an AI-powered learning platform that turns your study materials into interactive assignments and coding challenges. Simply upload your learning resources—whether it's articles, textbooks, or video series—and Brain Forge will generate tailored exercises to reinforce key concepts and test your knowledge. Whether you're a student looking to practice, an educator designing coursework, or a self-learner exploring new topics, Brain Forge helps you engage with content in a more hands-on, meaningful way.
           </p>
           <Button asChild>
             <Link to="/signup">Try Now</Link>

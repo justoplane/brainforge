@@ -19,7 +19,7 @@ const languages = [
 ];
 
 export function CodeIDE({ setOutput, starterCode}:CodeIDEProps){
-  const [code, setCode] = useState(starterCode); // Initialize with starterCode
+  const [code, setCode] = useState(starterCode);
   const [language, setLanguage] = useState("javascript");
 
 
