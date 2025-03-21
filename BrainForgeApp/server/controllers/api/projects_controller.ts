@@ -115,10 +115,6 @@ export const getChatHistory: EndpointBuilder = (db) => async (req, res) => {
       orderBy: { createdAt: "asc" }, // Optional: Order by creation time
     });
 
-    if (!chatHistory.length) {
-      return res.status(404).json({ error: "No chat history found for the given history ID" });
-    }
-
     res.status(200).json({ chatHistory });
     console.log(chatHistory);
   } catch (error) {
