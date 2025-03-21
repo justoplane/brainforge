@@ -10,12 +10,12 @@ export function Task({ instructions, expectedOutput }: TaskProps) {
     <div className="p-4 border rounded-lg shadow-sm bg-card">
       <h2 className="text-xl font-semibold mb-2">Assignment</h2>
       
-      <div className="p-3 border border-solid rounded-md bg-muted/20">
+      <div className="p-3 border border-solid rounded-md bg-muted/20 break-words overflow-y-auto max-h-102">
         <ReactMarkdown>{instructions}</ReactMarkdown>
       </div>
       
       {expectedOutput && (
-        <div className="p-3 border border-dashed rounded-md bg-muted/10 mt-4">
+        <div className="p-3 border border-dashed rounded-md bg-muted/10 overflow-y-auto mt-4">
           <b className="text-primary">Expected Output: </b>
           <p className="text-muted-foreground">{expectedOutput}</p>
         </div>

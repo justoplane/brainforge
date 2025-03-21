@@ -68,7 +68,7 @@ export const ChatContainer = ({ historyId }: ChatContainerProps) => {
   return (
     <div className="p-4 border rounded-lg shadow-sm bg-card flex flex-col h-full">
       <h2 className="text-xl font-semibold mb-2">Chat with AI</h2>
-      <div className="flex-1 overflow-y-auto space-y-2">
+      <div className="flex-1 overflow-y-auto space-y-2 max-h-125">
         {messages.map((message, index) => (
           <div
             key={index}
