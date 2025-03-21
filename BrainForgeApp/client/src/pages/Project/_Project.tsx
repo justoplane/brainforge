@@ -7,16 +7,10 @@ import { CodeIDE } from "../../components/project/CodeIDE";
 import { ChatContainer } from "../../components/project/ChatContainer";
 import { OutputContainer } from "../../components/project/OutputContainer";
 import { Task } from "../../components/project/Task";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-} from "../../components/ui/drawer";
-import { DialogTitle } from "../../components/ui/dialog"; // Assuming you have a DialogTitle component
+import { Drawer,  DrawerContent,  DrawerTrigger,} from "../../components/ui/drawer";
+import { DialogTitle } from "../../components/ui/dialog";
 import { useParams } from "react-router";
 import { Button } from "../../components/ui/button";
-
-
 
 
 type User = {
@@ -44,19 +38,10 @@ type History = {
   updatedAt: string;
 };
 
-type ChatHistory = {
-  id: number;
-  historyId: number;
-  userMessage: string;
-  aiMessage: string;
-  createdAt: string;
-};
-
 
 export const Project = () => {
   requireLogin();
   const { id } = useParams<{ id: string }>();
-  
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(null);
@@ -82,7 +67,6 @@ export const Project = () => {
     const res = await api.get(`/api/projects/${id}`);
     if (!res.error) {
       setProject(res.project);
-      // TODO: Load other project data
     }
   }
 
@@ -90,6 +74,13 @@ export const Project = () => {
     fetchUser();
     fetchProject();
   }, []);
+
+  useEffect(() => {
+    if (history) {
+      setInstructions(history.instructions);
+      setStarterCode(history.starterCode || "");
+    }
+  }, [history]);
 
   useEffect(() => {
 
@@ -113,10 +104,8 @@ export const Project = () => {
     setInstructions(newHistory.instructions);
     setStarterCode(newHistory.starterCode || "");
   
-    // Optionally, update the history state if needed
+    // update history
     setHistory(newHistory);
-  
-    // Close the options drawer
     setIsOptionsOpen(false);
   };
 
@@ -132,7 +121,7 @@ export const Project = () => {
 
   return (
     <div className="relative flex min-h-screen">
-      {/* Left Side Drawer using chadcn UI */}
+      {/* Left Side Drawer create options drawer*/}
       <Drawer
         open={isOptionsOpen}
         onOpenChange={setIsOptionsOpen}
@@ -177,7 +166,7 @@ export const Project = () => {
           <DialogTitle className="text-xl font-semibold">Project History</DialogTitle>
           <div className="h-full">
             <DialogTitle></DialogTitle>
-            <ProjectHistory />
+            <ProjectHistory projectId={project.id} setHistory={setHistory} />
           </div>
         </DrawerContent>
       </Drawer>

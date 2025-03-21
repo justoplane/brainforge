@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
 import { useNavigate } from "react-router"; // Add this import for navigation
 
 type User = {
@@ -46,7 +45,6 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const api = useApi();
   const [projects, setProjects] = useState<Project[]>(mockProjects);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
   const navigate = useNavigate();
 
@@ -74,7 +72,6 @@ export const Dashboard = () => {
     const res = await api.post("/api/projects", { title: newProjectName });
     if (!res.error) {
       setProjects((prev) => [...prev, res.project]);
-      // setIsModalOpen(false);
       navigate(`/projects/${res.project.id}`);
     }
     else{

@@ -12,21 +12,8 @@ export const Layout = () => {
   const dispatch = useDispatch();
 
   const logout = () => {
-    // Implement your logout logic here
-    // localStorage.removeItem("authToken"); // Adjust key if stored differently
-    // // Optionally clear other user-related data
-    // sessionStorage.clear();
-
-    // navigate("/signin");
     dispatch(clearAuthToken());
-
-  //   console.log("Before logout:", localStorage.getItem("authToken")); // Check token before removal
-  // localStorage.removeItem("authToken");
-  // sessionStorage.clear();
-  // console.log("After logout:", localStorage.getItem("authToken")); // Check token after removal
-  navigate("/signin", { replace: true });
-
-
+    navigate("/signin", { replace: true });
   };
 
   return (

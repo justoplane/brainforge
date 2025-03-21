@@ -106,6 +106,26 @@ export const getAllProjects: EndpointBuilder = (db) => async (req, res) => {
   }
 };
 
+export const getChatHistory: EndpointBuilder = (db) => async (req, res) => {
+  const { historyId } = req.params;
+
+  try {
+    const chatHistory = await db.chatHistory.findMany({
+      where: { historyId: parseInt(historyId) },
+      orderBy: { createdAt: "asc" }, // Optional: Order by creation time
+    });
+
+    if (!chatHistory.length) {
+      return res.status(404).json({ error: "No chat history found for the given history ID" });
+    }
+
+    res.status(200).json({ chatHistory });
+    console.log(chatHistory);
+  } catch (error) {
+    res.status(400).json({ error: "Failed to fetch chat history" });
+  }
+};
+
 export const ProjectsController = controller([
   {
     method: "post",
@@ -141,6 +161,12 @@ export const ProjectsController = controller([
     method: "get",
     path: "/",
     builder: getAllProjects,
+    middleware: [authMiddleware],
+  },
+  {
+    method: "get",
+    path: "/:historyId/chat-history",
+    builder: getChatHistory,
     middleware: [authMiddleware],
   },
 ]);

@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import { useApi } from "@/lib/hooks/use_api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Message {
   sender: "user" | "ai";
@@ -14,6 +14,29 @@ export const ChatContainer = ({ historyId }: ChatContainerProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const api = useApi();
+
+  useEffect(() => {
+    fetchChatHistory();
+    }, [historyId]);
+
+    const fetchChatHistory = async () => {
+      try {
+        if (!historyId) return;
+        const response = await api.get(`/api/projects/${historyId}/chat-history`);
+        if (response.chatHistory) {
+          // Transform the server response into the expected Message format
+          const formattedMessages: Message[] = response.chatHistory.map((chat: any) => [
+            { sender: "user", text: chat.userMessage },
+            { sender: "ai", text: chat.aiMessage },
+          ]).flat();
+
+          setMessages(formattedMessages);
+        }
+        console.log("Chat History:", response.chatHistory);
+      } catch (error) {
+        console.error("Error fetching chat history:", error);
+      }
+    };
 
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
