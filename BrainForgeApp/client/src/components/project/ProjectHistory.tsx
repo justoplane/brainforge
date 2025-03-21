@@ -2,10 +2,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useApi } from "../../lib/hooks/use_api";
 
-
-
-
-
 type History = {
   id: number;
   type: "Assignment" | "Challenge";
@@ -56,7 +52,7 @@ export function ProjectHistory({ projectId, setHistory }: ProjectHistoryProps) {
             ))
           ) : (
             <p className="text-muted-foreground text-sm mt-6">
-              No history available for this project.
+              No history available for this project. Click Create New to make new challenges/assignments.
             </p>
           )}
         </div>
