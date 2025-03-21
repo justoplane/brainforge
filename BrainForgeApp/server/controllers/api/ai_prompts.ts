@@ -21,6 +21,7 @@ starter code for the challenge, as well as an example of the expected output for
 The starter code should be written in the programming
 language specified by the user. Make sure that the starter code isn't a complete solution to the challenge, but rather a starting point that the user
 can build off of to complete the challenge. The expected output should be an example of the output that a complete solution to the challenge would produce.
+The starter code should not be the full solution, the user must fill in the rest or change things to get it to work.
 Always respond to the user with a json structure and no type of extra text, such as "'''json". Here's an example of the json structure:
 {
   "code": "*String containing starter code*",
