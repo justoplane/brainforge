@@ -1,12 +1,10 @@
 import { EndpointBuilder, controller } from "../controller";
-import { $Enums, PrismaClient } from "@prisma/client";
+import { $Enums} from "@prisma/client";
 import { authMiddleware } from "../../middleware/auth_middleware";
 import { fetchAIAssnResponse, fetchAIChatResponse } from "./ai_prompts";
 import { YoutubeTranscript } from "youtube-transcript";
 
 export const generateAssignmentOrChallenge: EndpointBuilder = (db) => async (req, res) => {
-  console.log("generate called");
-  console.log(req.body)
   
   let { projectId, type,inputType, inputValue } = req.body;
   projectId = parseInt(projectId);
@@ -19,9 +17,9 @@ export const generateAssignmentOrChallenge: EndpointBuilder = (db) => async (req
     try{
       const transcript = await YoutubeTranscript.fetchTranscript(inputValue, { lang: 'en'});
       inputValue = transcript.map(entry => entry.text).join(' '); // copilot told me how to get the text
-      console.log("yt link text:", inputType)
-    } catch(erro){
+    } catch(error){
       console.log("Unable to get Youtube video!");
+      return res.status(400).json({ error: "Unable to get Youtube video!" });
     }
   }
 
@@ -100,7 +98,7 @@ export const AIController = controller([
     method: "post",
     path: "/generate",
     builder: generateAssignmentOrChallenge,
-    middleware: [authMiddleware], // Ensure the user is authenticated
+    middleware: [authMiddleware],
   },
   {
     method: "post",

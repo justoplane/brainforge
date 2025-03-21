@@ -32,3 +32,4 @@ The repo is setup to use VS Code Dev Containers which create an ssh connection t
 Look at the /server/package.json file for a bunch of helpful scripts for inspect the database. Run the scripts by running `docker-compose exec server npm run <script name>`
 
 
+Starter Code provided by: https://github.com/dittonjs/4610ReactExpressStarterAppFinal.git 

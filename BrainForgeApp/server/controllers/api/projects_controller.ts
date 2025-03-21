@@ -1,10 +1,9 @@
 import { EndpointBuilder, controller } from "../controller";
-import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "../../middleware/auth_middleware";
 import { ProjectsRepository } from "../../lib/repositories/projects_repository";
 
 export const createProject: EndpointBuilder = (db) => async (req, res) => {
-  const { title, description } = req.body;
+  const { title } = req.body;
   const userId = req.user?.id;
 
   if (!userId) {
