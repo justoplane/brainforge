@@ -26,7 +26,7 @@
 
 ## Implementation
 - Vite w/ express and react
-- Use starter code
+- Use starter code: https://github.com/dittonjs/4610ReactExpressStarterAppFinal.git
 - Docker Compose
 - In-app code editor
   - https://www.youtube.com/watch?v=THgBePRV13o
