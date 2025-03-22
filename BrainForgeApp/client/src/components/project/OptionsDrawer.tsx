@@ -15,27 +15,31 @@ export function OptionsDrawer({ onAssignmentSubmit, projectId }: OptionsDrawerPr
   const [inputType, setInputType] = useState("text");
   const [inputValue, setInputValue] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false); // New loading state
   const api = useApi();
   
   
   const handleSubmit = async () => {
-      try {
-        const response = await api.post("/api/ai/generate", {
-            projectId, 
-            type: taskType.toUpperCase(),
-            inputType,
-            inputValue: inputType === 'pdf' && file ? file.name : inputValue,
-        });
-        
-        if (response) {
-          onAssignmentSubmit(response.history); // Pass the server response to the parent
-        } else {
-          console.error('Error: response was not ok.');
-        }
-      } catch (error) {
-        console.error('Error submitting assignment:', error);
+    setLoading(true); // Set loading to true when the request starts
+    try {
+      const response = await api.post("/api/ai/generate", {
+        projectId, 
+        type: taskType.toUpperCase(),
+        inputType,
+        inputValue: inputType === 'pdf' && file ? file.name : inputValue,
+      });
+      
+      if (response) {
+        onAssignmentSubmit(response.history); // Pass the server response to the parent
+      } else {
+        console.error('Error: response was not ok.');
       }
+    } catch (error) {
+      console.error('Error submitting assignment:', error);
+    } finally {
+      setLoading(false); // Set loading to false when the request completes
     }
+  };
 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,8 +119,8 @@ export function OptionsDrawer({ onAssignmentSubmit, projectId }: OptionsDrawerPr
 
         {/* Submit and Generate AI Response Buttons */}
         <div className="flex space-x-4 mt-6">
-          <Button onClick={handleSubmit} className="w-full">
-            Submit
+          <Button onClick={handleSubmit} className="w-full" disabled={loading}>
+            {loading ? "Loading..." : "Submit"}
           </Button>
         </div>
       </div>
